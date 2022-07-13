@@ -8,6 +8,8 @@ static uint8_t const BIG_MODULE_COUNT = 3;
 static uint8_t const PACKET_SIZE = 5;
 
 static float const GEAR_TIME_DIV = 5000.;
+static float const COMPLETION_TIME = 2000.;
+static float const COMPLETION_TIME_DIV = COMPLETION_TIME / 255.;
 static uint8_t const BLINK_TIME_DIV = 9;
 static uint8_t const BLINK_FAST_TIME_DIV = 3;
 
@@ -25,13 +27,13 @@ static uint32_t const WARNING_HUE = 255;
 
 enum LMODE {
     GEAR,
+    PASSIVE,
     CONNECTED,
     SETUP,
     RECONNECT,
     CLEAR_WARNING,
     CLEAR_ON_SETUP_WARNING,
     CLEAR_PROGRESS_WARNING,
-    //LOADING,
     PROGRESS,
     COMPLETION,
 };

@@ -47,6 +47,8 @@ class SubState :  public ButtonHandler {
         void AddCompletion() { 
             if(Completions() < Goal()){
                 _completions[DayIndex()] +=1;
+                SaveMode();
+                resetCompletionTimer();
                 _update_flag |= 1<< 1; 
             }
         }
@@ -108,6 +110,14 @@ class SubState :  public ButtonHandler {
             _dayOfReset = day;
             _displacement = 0;
             SetUpdateAll();
+        }
+        void resetCompletionTimer(){
+            completionTimer = 0;
+        }
+        void handleCompletionTimer(){
+            if(completionTimer > COMPLETION_TIME){
+                SetMode(SavedMode());
+            }
         }
         void resetReconnectTimer(){
             setupTimer = 0;
@@ -185,6 +195,7 @@ class SubState :  public ButtonHandler {
         }
     private:
         elapsedMillis setupTimer = SETUP_WAIT_TIME;
+        elapsedMillis completionTimer = COMPLETION_TIME;
         uint8_t _update_flag;
         bool _isConnected = false; 
         bool _isSetup = false;

@@ -148,6 +148,7 @@ class MainState: public ButtonHandler, public EncoderHandler {
                                     if(HoldTime() <= SHORT_PRESS_TIME) {
                                         // clear sub
                                         sub->AddCompletion();
+
                                     }
                                 } else {
                                     sub->checkClearProgress();
@@ -162,6 +163,10 @@ class MainState: public ButtonHandler, public EncoderHandler {
                                 if(sub->checkCancelClearSetUpProgress()){
                                     n_setup_and_active_modules--;
                                 }
+                                break;
+                            }
+                            case COMPLETION: {
+                                sub->handleCompletionTimer();
                                 break;
                             }
                             default:
@@ -200,6 +205,10 @@ class MainState: public ButtonHandler, public EncoderHandler {
                                 }
                                 case CLEAR_PROGRESS_WARNING: {
                                     sub->checkCancelClearProgress();
+                                    break;
+                                }
+                                case COMPLETION: {
+                                    sub->handleCompletionTimer();
                                     break;
                                 }
                             }
@@ -398,8 +407,6 @@ class MainState: public ButtonHandler, public EncoderHandler {
                 (uint8_t(23 + t / 80.) << (17 - i)) - 
                 (uint8_t(13 - i*t / 67.) << (i - 7))
                 , 0,map(_momentum,8,1));
-                Serial.print(rnd);
-                Serial.print(" ");
                 momentum = constrain(int(_momentum) + rnd, 0, 255);
                 blink_div = map(momentum, BLINK_FAST_TIME_DIV * 2, BLINK_TIME_DIV * 2);
                 blink = _ring.sine8(time/ blink_div);
@@ -414,7 +421,6 @@ class MainState: public ButtonHandler, public EncoderHandler {
                         )
                     ,0,255)));
             }
-            Serial.println();
         }
         void renderConfirm(){
             int ht = (active_module == nullptr)? HoldTime(): active_module->HoldTime();
